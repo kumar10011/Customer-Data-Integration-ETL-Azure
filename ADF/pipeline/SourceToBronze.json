@@ -1,0 +1,137 @@
+{
+  "name": "SourceToBronze",
+  "properties": {
+    "description": "Discovers source files and copies them to the bronze layer.",
+    "parameters": {
+      "SourceFolder": {
+        "type": "String",
+        "defaultValue": "input"
+      },
+      "BronzeFolder": {
+        "type": "String",
+        "defaultValue": "bronze"
+      }
+    },
+    "variables": {
+      "CurrentFileName": {
+        "type": "String"
+      }
+    },
+    "activities": [
+      {
+        "name": "GetMetadata1",
+        "type": "GetMetadata",
+        "typeProperties": {
+          "fieldList": [
+            "childItems"
+          ],
+          "storeSettings": {
+            "type": "AzureBlobStorageReadSettings",
+            "recursive": true
+          },
+          "formatSettings": {
+            "type": "DelimitedTextReadSettings"
+          }
+        }
+      },
+      {
+        "name": "ForEachFile",
+        "type": "ForEach",
+        "typeProperties": {
+          "items": "@activity('GetMetadata1').output.childItems",
+          "isSequential": true,
+          "activities": [
+            {
+              "name": "SetCurrentFileName",
+              "type": "SetVariable",
+              "typeProperties": {
+                "variableName": "CurrentFileName",
+                "value": "@item().name"
+              }
+            },
+            {
+              "name": "LookupFolderConfig",
+              "type": "Lookup",
+              "typeProperties": {
+                "source": {
+                  "type": "AzureSqlSource",
+                  "sqlReaderQuery": "SELECT FolderName FROM MetadataTable WHERE FileType = '@{last(split(item().name,'.'))}'",
+                  "queryTimeout": "00:05:00"
+                },
+                "dataset": {
+                  "referenceName": "AzureSQLMetadataDataset",
+                  "type": "DatasetReference"
+                },
+                "firstRowOnly": true
+              }
+            },
+            {
+              "name": "IfFolderConfigured",
+              "type": "IfCondition",
+              "typeProperties": {
+                "expression": {
+                  "value": "@not(empty(activity('LookupFolderConfig').output.firstRow.FolderName))",
+                  "type": "Expression"
+                },
+                "ifTrueActivities": [
+                  {
+                    "name": "CopyFileToBronze",
+                    "type": "Copy",
+                    "typeProperties": {
+                      "source": {
+                        "type": "DelimitedTextSource",
+                        "storeSettings": {
+                          "type": "AzureBlobStorageReadSettings",
+                          "recursive": false
+                        }
+                      },
+                      "sink": {
+                        "type": "DelimitedTextSink",
+                        "storeSettings": {
+                          "type": "AzureBlobStorageWriteSettings",
+                          "copyBehavior": "PreserveHierarchy"
+                        }
+                      },
+                      "enableStaging": false
+                    },
+                    "inputs": [
+                      {
+                        "referenceName": "CustomerBlobSourceDataset",
+                        "type": "DatasetReference"
+                      }
+                    ],
+                    "outputs": [
+                      {
+                        "referenceName": "CustomerBronzeDataset",
+                        "type": "DatasetReference"
+                      }
+                    ]
+                  }
+                ],
+                "ifFalseActivities": [
+                  {
+                    "name": "LogInvalidFile",
+                    "type": "SqlServerStoredProcedure",
+                    "typeProperties": {
+                      "storedProcedureName": "dbo.LogETLError",
+                      "storedProcedureParameters": {
+                        "FileName": {
+                          "value": "@item().name",
+                          "type": "String"
+                        },
+                        "ErrorMessage": {
+                          "value": "No folder configuration found for file type",
+                          "type": "String"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

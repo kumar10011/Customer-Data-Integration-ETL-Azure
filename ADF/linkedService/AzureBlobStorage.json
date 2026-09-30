@@ -1,0 +1,12 @@
+{
+  "name": "AzureBlobStorage",
+  "properties": {
+    "type": "AzureBlobStorage",
+    "typeProperties": {
+      "connectionString": "<STORE_CONNECTION_STRING_FROM_KEY_VAULT_OR_MANAGED_IDENTITY>"
+    },
+    "annotations": [
+      "TEMPLATE_ONLY_DO_NOT_STORE_SECRETS"
+    ]
+  }
+}

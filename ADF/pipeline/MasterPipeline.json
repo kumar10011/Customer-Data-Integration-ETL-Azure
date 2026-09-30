@@ -1,0 +1,83 @@
+{
+  "name": "MasterPipeline",
+  "properties": {
+    "description": "Orchestrates customer ETL child pipelines sequentially.",
+    "parameters": {
+      "SourceFolder": {
+        "type": "String",
+        "defaultValue": "input"
+      }
+    },
+    "activities": [
+      {
+        "name": "Execute_SourceToBronze",
+        "type": "ExecutePipeline",
+        "dependsOn": [],
+        "typeProperties": {
+          "pipelineReference": {
+            "referenceName": "SourceToBronze",
+            "type": "PipelineReference"
+          },
+          "waitOnCompletion": true
+        }
+      },
+      {
+        "name": "Execute_BronzeToSilver",
+        "type": "ExecutePipeline",
+        "dependsOn": [
+          {
+            "activity": "Execute_SourceToBronze",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "pipelineReference": {
+            "referenceName": "BronzeToSilver",
+            "type": "PipelineReference"
+          },
+          "waitOnCompletion": true
+        }
+      },
+      {
+        "name": "Execute_SilverToGold",
+        "type": "ExecutePipeline",
+        "dependsOn": [
+          {
+            "activity": "Execute_BronzeToSilver",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "pipelineReference": {
+            "referenceName": "SilverToGold",
+            "type": "PipelineReference"
+          },
+          "waitOnCompletion": true
+        }
+      },
+      {
+        "name": "Execute_GoldToAzureSQL",
+        "type": "ExecutePipeline",
+        "dependsOn": [
+          {
+            "activity": "Execute_SilverToGold",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "pipelineReference": {
+            "referenceName": "GoldToAzureSQL",
+            "type": "PipelineReference"
+          },
+          "waitOnCompletion": true
+        }
+      }
+    ]
+  }
+}

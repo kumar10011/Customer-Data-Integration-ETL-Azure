@@ -1,0 +1,29 @@
+{
+  "name": "SilverToGold",
+  "properties": {
+    "description": "Applies final business-ready customer transformations.",
+    "parameters": {
+      "InputPath": {
+        "type": "String",
+        "defaultValue": ""
+      },
+      "OutputPath": {
+        "type": "String",
+        "defaultValue": ""
+      }
+    },
+    "activities": [
+      {
+        "name": "TransformSilverToGold",
+        "type": "DatabricksNotebook",
+        "typeProperties": {
+          "notebookPath": "/CustomerETL/customer_gold",
+          "baseParameters": {
+            "input_path": "@pipeline().parameters.InputPath",
+            "output_path": "@pipeline().parameters.OutputPath"
+          }
+        }
+      }
+    ]
+  }
+}

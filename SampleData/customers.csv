@@ -1,0 +1,6 @@
+CustomerID,CustomerName,Email,Phone,City,Country
+1001, Anjani Kumar ,ANJANI@EXAMPLE.COM,9876543210,Hyderabad,India
+1002,Ravi Kumar,,9123456780,Chennai,India
+1002,Ravi Kumar,ravi@example.com,9123456780,Chennai,India
+1003, Priya Sharma ,PRIYA@EXAMPLE.COM,,Bengaluru,India
+1004,Suresh Rao,SURESH@EXAMPLE.COM,9000000000,,India

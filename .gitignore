@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Databricks/local
+.databricks/
+*.dbc
+
+# Azure local settings
+local.settings.json
+
+# Secrets
+.env
+*.key
+*.pem
+secrets.json
+credentials.json
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Generated output
+output/
+logs/

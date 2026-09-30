@@ -1,0 +1,28 @@
+{
+  "name": "CustomerSilverDataset",
+  "properties": {
+    "linkedServiceName": {
+      "referenceName": "AzureBlobStorage",
+      "type": "LinkedServiceReference"
+    },
+    "parameters": {
+      "FileName": {
+        "type": "String",
+        "defaultValue": "customers_cleaned.csv"
+      }
+    },
+    "type": "DelimitedText",
+    "typeProperties": {
+      "location": {
+        "type": "AzureBlobStorageLocation",
+        "container": "silver",
+        "fileName": {
+          "value": "@dataset().FileName",
+          "type": "Expression"
+        }
+      },
+      "columnDelimiter": ",",
+      "firstRowAsHeader": true
+    }
+  }
+}

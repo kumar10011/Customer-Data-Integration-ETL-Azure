@@ -1,0 +1,29 @@
+{
+  "name": "BronzeToSilver",
+  "properties": {
+    "description": "Cleans and standardizes bronze customer data using the PySpark transformation.",
+    "parameters": {
+      "InputPath": {
+        "type": "String",
+        "defaultValue": ""
+      },
+      "OutputPath": {
+        "type": "String",
+        "defaultValue": ""
+      }
+    },
+    "activities": [
+      {
+        "name": "TransformCustomerData",
+        "type": "DatabricksNotebook",
+        "typeProperties": {
+          "notebookPath": "/CustomerETL/customer_cleaning",
+          "baseParameters": {
+            "input_path": "@pipeline().parameters.InputPath",
+            "output_path": "@pipeline().parameters.OutputPath"
+          }
+        }
+      }
+    ]
+  }
+}

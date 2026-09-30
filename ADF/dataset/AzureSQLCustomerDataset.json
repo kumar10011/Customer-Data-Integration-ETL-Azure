@@ -1,0 +1,14 @@
+{
+  "name": "AzureSQLCustomerDataset",
+  "properties": {
+    "linkedServiceName": {
+      "referenceName": "AzureSQLDatabase",
+      "type": "LinkedServiceReference"
+    },
+    "type": "AzureSqlTable",
+    "typeProperties": {
+      "schema": "dbo",
+      "table": "Customer"
+    }
+  }
+}

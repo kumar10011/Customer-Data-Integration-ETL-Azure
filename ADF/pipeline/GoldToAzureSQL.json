@@ -1,0 +1,32 @@
+{
+  "name": "GoldToAzureSQL",
+  "properties": {
+    "description": "Loads curated customer data into Azure SQL Database.",
+    "parameters": {
+      "InputPath": {
+        "type": "String",
+        "defaultValue": ""
+      },
+      "OutputPath": {
+        "type": "String",
+        "defaultValue": ""
+      }
+    },
+    "activities": [
+      {
+        "name": "CopyGoldToAzureSQL",
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "DelimitedTextSource"
+          },
+          "sink": {
+            "type": "AzureSqlSink",
+            "writeBehavior": "insert",
+            "sqlWriterUseTableLock": true
+          }
+        }
+      }
+    ]
+  }
+}
