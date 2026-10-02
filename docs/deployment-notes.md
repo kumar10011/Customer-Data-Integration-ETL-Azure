@@ -7,7 +7,7 @@
    - 02_error_table.sql
    - 03_customer_table.sql
 4. Create ADF.
-5. Create linked services using Managed Identity or Key Vault-backed secrets.
+5. Create linked services using Managed Identity or Key Vault-backed secrets
 6. Create datasets and pipelines from the repository artifacts.
 7. Configure the Databricks/PySpark environment if using Databricks.
 8. Parameterize environment-specific paths.
