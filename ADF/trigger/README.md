@@ -6,4 +6,4 @@ A production implementation can use:
 - Tumbling Window Trigger when time-windowed processing is required.
 - Event-based trigger when files arriving in Blob Storage should start processing.
 
-The sample project is documented without an active trigger because triggers are environment-specific.
+The sample project documented without an active trigger because triggers are environment-specific.
