@@ -44,7 +44,7 @@ The project uses a master/child pipeline pattern:
 4. `SilverToGold` applies business-ready transformations.
 5. `GoldToAzureSQL` loads the final customer dataset into Azure SQL Database.
 
-A metadata/configuration table is used to determine the destination folder based on the source file type.
+A metadata/configuration table is used to determine the destination folder based on the source file type
 
 ## Key ADF Activities
 
